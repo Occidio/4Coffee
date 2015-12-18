@@ -15,9 +15,6 @@ app.get('/GetGraph', function (req, response) {
 	var DB = new DBInterface();
 	DB.GetGraphData(req.query.Day, function(averages, dates){
 
-		console.log("Averages " + averages);
-		console.log("Data " + dates);
-
 		var result = JSON.stringify([averages,dates]);
 
         response.write(result);
@@ -29,18 +26,9 @@ app.get('/GetGraph', function (req, response) {
 app.post('/Log', function (req, res) {
 	var DB = new DBInterface();
 
-	console.log("req " + req.body);
+	DB.InsertLog(new Date(req.body.Time), req.body.ApproxTime, req.body.CardMachine, req.body.CoffeeMachine);
 
-	actualTime = new Date(req.body.Time);
-	queueTime = req.body.ApproxTime;
-	cardMachineWorking = req.body.CardMachine;
-	coffeeMachineWorking = req.body.CoffeeMachine;
-
-	console.log("actualTime " + actualTime);
-
-	DB.InsertLog(actualTime, queueTime, cardMachineWorking, coffeeMachineWorking);
-
-	res.send(swig.renderFile("./website/index.html"))
+	res.send("success");
 });
 
 

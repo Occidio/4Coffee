@@ -77,6 +77,9 @@ method.GetGraphData = function(day, callback)
 {
 	db.serialize(function() 
 	{
+
+		var currentAverages = new Array;
+		var todaysData = new Array;
 		db.each("SELECT CurrentAverage FROM Summary WHERE Day = ? ORDER BY Time ASC",day,function(err, row){
 			if(err){
 		  		console.log(err);
@@ -94,7 +97,19 @@ method.GetGraphData = function(day, callback)
 			}
 		},function()
 		{
-			db.each("SELECT AVG(QueueTime) as QueueTime, Time FROM Log WHERE DateCreated = date('now') GROUP BY Time",function(err, row){
+
+			var todayDate = new Date();
+			var todayInt = dayOfWeekAsInteger(todayDate.getDay());
+
+			var difference = todayInt - day;
+
+			if(difference<0){
+				return;
+			}
+
+			todayDate.setDate(todayDate.getDate() - difference);
+
+			db.each("SELECT AVG(QueueTime) as QueueTime, Time FROM Log WHERE DateCreated = ? GROUP BY Time", convertDate(todayDate),function(err, row){
 				if(err){
 			  		console.log(err);
 						//break out
