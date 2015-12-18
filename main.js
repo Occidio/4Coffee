@@ -6,26 +6,23 @@ var http = require('http');
 var fs = require('fs');
 
 app.get('/GetGraph', function (req, response) {
-	fs.readFile('Graph/graph.html', 'utf-8', function (err, data) {
-	        response.writeHead(200, { 'Content-Type': 'text/html' });
+	response.header("Access-Control-Allow-Origin", "*");
 
-	        var averageData = [];
-	        var todayData = [];
+	var DB = new DBInterface();
+	DB.GetGraphData(function(averages, dates){
+		for (var i = 0; i < 36; i++)
+    		averages.push(Math.random() * 50);
+    	for (var i = 0; i < 36; i++)
+    		dates.push(Math.random() * 50);
 
-        	var DB = new DBInterface();
-			DB.GetGraphData(function(averages, data){
-				console.log("Averages "+averages);
-				console.log("Data " + data);
+		console.log("Averages " + averages);
+		console.log("Data " + dates);
 
-				data = data.toString('utf8').replace('{{averageData}}', JSON.stringify(averages));
-	        	var result = data.toString('utf8').replace('{{todayData}}', JSON.stringify(data));
+		var result = JSON.stringify([averages,dates]);
 
-		        response.write(result);
-		        response.end();
-			});
-	        
-	        
-    	});
+        response.write(result);
+        response.end();
+	});
 });
 
 app.post('/Log', function (req, res) {

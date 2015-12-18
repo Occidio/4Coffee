@@ -1,13 +1,10 @@
 <html>
 <head>
-    <title></title>
-    <meta charset="utf-8" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
-    <style>
-    </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 </head>
+
 <body>
-    <canvas id="myChart" style="width:100%; height:600;"></canvas>
+
     <script>
         var data = {
             labels: ["0800", "0815", "0830", "0845", "0900", "0915", "0930", "0945", "1000", "1015", "1030", "1045", "1100", "1115", "1130", "1145", "1200", "1215", "1230", "1245","1300", "1315", "1330", "1345","1400", "1415", "1430", "1445","1500", "1515", "1530", "1545","1600"],
@@ -35,8 +32,6 @@
             ]
         };
 
-        var ctx = document.getElementById("myChart").getContext("2d");
-        var myNewChart = new Chart(ctx).Line(data);
     </script>
 </body>
 </html>
