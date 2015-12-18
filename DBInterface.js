@@ -11,7 +11,7 @@ method.CreateSchema = function() {
 	db.serialize(function() {
 		db.run("CREATE TABLE IF NOT EXISTS Log (DateCreated DATETIME, Time INT, QueueTime INT, CardMachine INT, CoffeeMachine INT);");
 
-		db.run("CREATE TABLE IF NOT EXISTS Summary (Day INT, Time INT, CurrentAverage INT, NumberOfLogs INT);");
+		db.run("CREATE TABLE IF NOT EXISTS Summary (Day INT, Time INT, CurrentAverage INT DEFAULT(0), NumberOfLogs INT DEFAULT(0));");
 
 		db.each("SELECT Count(*) as Count FROM Summary",function(err, row){
 			if(err){
@@ -105,8 +105,50 @@ method.GetGraphData = function(callback)
 	callback(currentAverages, todaysData);
 }
 
+method.InsertLog = function(actualTime, queueTime, cardMachineWorking, coffeeMachineWorking) 
+{
+	db.run("INSERT INTO Log(Time, QueueTime, CardMachine, CoffeeMachine) VALUES(?,?,?,?)", actualTime, queueTime, cardMachineWorking, coffeeMachineWorking);
+	method.InsertSummary(actualTime, queueTime);
+}
+
+method.InsertSummary = function(actualTime, queueTime) 
+{
+	//Get 15 mins from queueTime
+	hour = actualTime.getHours()
+	mins = (Math.round(actualTime.getMinutes()/15) * 15) % 60;
+
+	//putting the Hack in HackDay
+	if(mins == 0)
+	{
+		hour = hour+1;
+		var completeTime = hour+""+mins+"0";
+	}
+	else{
+		var completeTime = hour+""+mins;
+	}
+			
+	//Convert actualTime into INT day
+	var day = dayOfWeekAsInteger(actualTime.getDay());
+
+	//get row for day and time
+	db.each("SELECT rowid, CurrentAverage, NumberOfLogs FROM Summary WHERE Time = ? AND Day = ?", completeTime, day, function(err,row)
+	{
+		if(err){
+	  		console.log(err);
+		}
+		else{
+			//calculate average
+			newNumberOfRows = row.NumberOfLogs + 1;	
+
+			//Save updated date
+			db.run("UPDATE Summary SET CurrentAverage = ?, NumberOfLogs = ? WHERE rowid = ?", newAverage, newNumberOfRows, row.rowid);
+		}
+	});
+}
+
 function dayOfWeekAsInteger(day) {
-  return ["Sunday","0","1","2","3","4","Saturday"].indexOf(day);
+	var dayArray = ["Sunday","0","1","2","3","4","Saturday"]
+  	return dayArray[day];
 }
 
 module.exports = DBInterface;

@@ -25,9 +25,20 @@ app.get('/GetGraph', function (req, response) {
 	});
 });
 
-app.post('/Log', function (req, res) {
-	res.send("Success");
+
+app.get('/Log', function (req, res) {
+	var DB = new DBInterface();
+
+	actualTime = new Date();
+	queueTime = 5;
+	cardMachineWorking = 1;
+	coffeeMachineWorking = 0;
+
+	DB.InsertLog(actualTime, queueTime, cardMachineWorking, coffeeMachineWorking);
+
+	res.send("success")
 });
+
 
 var server = app.listen(3000, function () {
 	var host = "localhost"
