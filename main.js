@@ -40,7 +40,7 @@ app.post('/Log', function (req, res) {
 
 	DB.InsertLog(actualTime, queueTime, cardMachineWorking, coffeeMachineWorking);
 
-	res.send(swig.renderFile("./website/index.html"))
+	res.redirect("/index.html");
 });
 
 

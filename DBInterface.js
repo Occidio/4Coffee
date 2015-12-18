@@ -77,6 +77,8 @@ method.GetGraphData = function(day, callback)
 {
 	db.serialize(function() 
 	{
+		var currentAverages = new Array;
+		var todaysData = new Array;
 		db.each("SELECT CurrentAverage FROM Summary WHERE Day = ? ORDER BY Time ASC",day,function(err, row){
 			if(err){
 		  		console.log(err);

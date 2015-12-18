@@ -23,6 +23,7 @@
 		function UpdateDateTime(){
 			var d = new Date();
 			d.setMilliseconds(000);
+			d.setSeconds(00);
 			document.getElementById("Time").value = d.toISOString().replace('Z', '');
 		}
 
