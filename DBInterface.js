@@ -9,7 +9,7 @@ function DBInterface(){
 
 method.CreateSchema = function() {
 	db.serialize(function() {
-		db.run("CREATE TABLE IF NOT EXISTS Log (DateCreated DATETIME, QueueTime INT, CardMachine INT, CoffeeMachine INT);");
+		db.run("CREATE TABLE IF NOT EXISTS Log (DateCreated DATETIME, Time INT, QueueTime INT, CardMachine INT, CoffeeMachine INT);");
 
 		db.run("CREATE TABLE IF NOT EXISTS Summary (Day INT, Time INT, CurrentAverage INT, NumberOfLogs INT);");
 
@@ -19,10 +19,9 @@ method.CreateSchema = function() {
 	  			//break out
 			}
 			else{
-		  		console.log(row);
 				if(row.Count == 0)
 				{
-					for (var i = 0; i <= 5; i++) //loop for each day as an int (dont care about weekend)
+					for (var i = 0; i <= 4; i++) //loop for each day as an int (dont care about weekend)
 					{	
 	  					console.log("Inserting for " + i);
 		  				method.AddSummaryTimes(i);
@@ -73,6 +72,41 @@ method.AddSummaryTimes = function(day)
 		db.run("INSERT INTO Summary (Day, Time) VALUES (?,1545)", day);
 		db.run("INSERT INTO Summary (Day, Time) VALUES (?,1600)", day);
 	});
+}
+
+method.GetGraphData = function(callback)
+{
+	var currentAverages = [];
+	var todaysData = [];
+
+	var today = new Date();
+	var dd = dayOfWeekAsInteger(today.getDay());
+
+	db.each("SELECT CurrentAverage FROM Summary WHERE Day = ? ORDER BY Time ASC",dd,function(err, row){
+		if(err){
+	  		console.log(err);
+				//break out
+		}
+		else{
+	  		currentAverages.push(row.CurrentAverage);
+		}
+	});
+
+	db.each("SELECT QueueTime FROM Log WHERE DateCreated = date('now') ORDER BY Time ASC",function(err, row){
+		if(err){
+	  		console.log(err);
+				//break out
+		}
+		else{
+	  		todaysData.push(row.CurrentAverage);
+		}
+	});
+
+	callback(currentAverages, todaysData);
+}
+
+function dayOfWeekAsInteger(day) {
+  return ["Sunday","0","1","2","3","4","Saturday"].indexOf(day);
 }
 
 module.exports = DBInterface;
