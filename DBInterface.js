@@ -73,17 +73,11 @@ method.AddSummaryTimes = function(day)
 	});
 }
 
-method.GetGraphData = function(callback)
+method.GetGraphData = function(day, callback)
 {
-	var currentAverages = [];
-	var todaysData = [];
-
-	var today = new Date();
-	var dd = dayOfWeekAsInteger(today.getDay());
-
 	db.serialize(function() 
 	{
-		db.each("SELECT CurrentAverage FROM Summary WHERE Day = ? ORDER BY Time ASC",dd,function(err, row){
+		db.each("SELECT CurrentAverage FROM Summary WHERE Day = ? ORDER BY Time ASC",day,function(err, row){
 			if(err){
 		  		console.log(err);
 					//break out

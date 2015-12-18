@@ -13,7 +13,7 @@ app.get('/GetGraph', function (req, response) {
 	response.header("Access-Control-Allow-Origin", "*");
 
 	var DB = new DBInterface();
-	DB.GetGraphData(function(averages, dates){
+	DB.GetGraphData(req.query.Day, function(averages, dates){
 
 		console.log("Averages " + averages);
 		console.log("Data " + dates);
