@@ -6,22 +6,30 @@
 	<script type="text/javascript">
 		function init()
 		{
-			GetGraph();
+			GetGraph(dayOfWeekAsInteger(new Date().getDay()));
 			UpdateDateTime();
-			$("#ApproxTime").on("input", function()
-			{
-				$("#ApproxTimeValue").innerHTML=this.value
-			});
+			UpdateApproxTimeValue();
+		}
+
+		function dayOfWeekAsInteger(day) {
+			var dayArray = ["Sunday","0","1","2","3","4","Saturday"]
+		  	return dayArray[day];
+		}
+
+		function UpdateApproxTimeValue(){
+			document.getElementById("ApproxTimeValue").innerHTML = document.getElementById("ApproxTime").value;
 		}
 
 		function UpdateDateTime(){
-			document.getElementById("Time").value = new Date().toISOString().replace('Z', '');
+			var d = new Date();
+			d.setMilliseconds(000);
+			document.getElementById("Time").value = d.toISOString().replace('Z', '');
 		}
 
-		function GetGraph()
+		function GetGraph(day)
 		{
 		    var xmlHttp = new XMLHttpRequest();
-		    xmlHttp.open( "GET", "http://localhost:3000/GetGraph", false ); // false for synchronous request
+		    xmlHttp.open( "GET", "http://localhost:3000/GetGraph?Day=" + day, false ); // false for synchronous request
 		    xmlHttp.send( );
 			
 			var arRayception = JSON.parse(xmlHttp.responseText);
@@ -63,7 +71,8 @@
 	<tbody>
 		<tr>
 			<td width="60%">
-				<h3><u>Queue times</u>&nbsp;<input type="button" value="Refresh" onclick="GetGraph()" /></h3>
+				<h3><u>Queue times</u></h3>
+				<div><input type="button" value="Monday" onclick="GetGraph(0)"/><input type="button" value="Tuesday" onclick="GetGraph(1)"/><input type="button" value="Wednesday" onclick="GetGraph(2)"/><input type="button" value="Thursday" onclick="GetGraph(3)"/><input type="button" value="Friday" onclick="GetGraph(4)"/></div>
 				&nbsp;
 			    <canvas id="myChart" style="width:90%; height:60%;"></canvas>
 			<td>&nbsp;</td>
@@ -71,9 +80,9 @@
 				<u>Submit a queue length</u>
 				&nbsp;
 				<form action="http://localhost:3000/Log" method="post">
-				<p>Date/time:&nbsp;<input type="datetime-local" id="Time" name="Time" step="1"/><input type="button" value="Now" onclick="UpdateDateTime()" required/></p>
+				<p>Date/time:&nbsp;<input type="datetime-local" id="Time" name="Time" required/><input type="button" value="Now" onclick="UpdateDateTime()"/></p>
 
-				<p>Approximate queue duration: 0<input type="range" id="ApproxTime" name="ApproxTime" max="15" min="0" step="1" value="5" required/>15 minutes <div id="ApproxTimeValue"/></p>
+				<p>Approximate queue duration:&nbsp;<input type="range" id="ApproxTime" name="ApproxTime" max="15" min="0" value="5" oninput="UpdateApproxTimeValue()" required/><div id="ApproxTimeValue"></div> minutes</p>
 
 				<p>Coffee machine working?:&nbsp;<input type="checkbox" name="CoffeeMachine" checked required/></p>
 
