@@ -4,6 +4,20 @@
 	<title></title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 	<script type="text/javascript">
+		function init()
+		{
+			GetGraph();
+			UpdateDateTime();
+			$("#ApproxTime").on("input", function()
+			{
+				$("#ApproxTimeValue").innerHTML=this.value
+			});
+		}
+
+		function UpdateDateTime(){
+			document.getElementById("Time").value = new Date().toISOString().replace('Z', '');
+		}
+
 		function GetGraph()
 		{
 		    var xmlHttp = new XMLHttpRequest();
@@ -42,39 +56,28 @@
 		}
 	</script>
 </head>
-<body>
+<body onload="init()">
 <h1 style="text-align: center;">4Coffee queue</h1>
 
-<table border="0" cellpadding="0" cellspacing="0" style="width:100%; height:80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);">
+<table border="0" cellpadding="0" cellspacing="0" style="border:1px solid #ccc; padding:5px 10px; width:100%; height:80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);">
 	<tbody>
-<!-- 		<tr>
-			<td style="width:60%">
-			<h3>Queue times</h3>
-			</td>
-			<td>&nbsp;</td>
-			<td style="width:40%">
-			<h3>Submit a queue length</h3>
-			</td>
-		</tr> -->
 		<tr>
-			<td>
-				<h3><u>Queue times</u>&nbsp;<input name="Button_Refresh" type="button" value="Refresh" onclick="GetGraph()" /></h3>
+			<td width="60%">
+				<h3><u>Queue times</u>&nbsp;<input type="button" value="Refresh" onclick="GetGraph()" /></h3>
 				&nbsp;
-				<div id="div_Graph" style="border:1px solid #ccc; padding:5px 10px; width:80%; height:60%;" title="Queue Graph">
-				    <canvas id="myChart" style="width:100%; height:100%;"></canvas>
-				</div></td>
+			    <canvas id="myChart" style="width:90%; height:60%;"></canvas>
 			<td>&nbsp;</td>
-			<td>
+			<td width="40%">
 				<u>Submit a queue length</u>
 				&nbsp;
 				<form action="http://localhost:3000/Log" method="post">
-				<p>Date/time:&nbsp;<input name="Time" type="checkbox" />Use current date/time</p>
+				<p>Date/time:&nbsp;<input type="datetime-local" id="Time" name="Time" step="1"/><input type="button" value="Now" onclick="UpdateDateTime()" required/></p>
 
-				<p>Approximate queue duration: 0<input name="ApproxTime" max="15" min="0" step="1" type="range" value="5" />15 minutes</p>
+				<p>Approximate queue duration: 0<input type="range" id="ApproxTime" name="ApproxTime" max="15" min="0" step="1" value="5" required/>15 minutes <div id="ApproxTimeValue"/></p>
 
-				<p>Coffee machine working?:&nbsp;<input name="CoffeeMachine" type="checkbox" /></p>
+				<p>Coffee machine working?:&nbsp;<input type="checkbox" name="CoffeeMachine" checked required/></p>
 
-				<p>Card machine working?:&nbsp;<input name="CardMachine" type="checkbox" /></p>
+				<p>Card machine working?:&nbsp;<input type="checkbox" name="CardMachine" checked required/></p>
 
 				<p><input type="submit" value="Submit entry" /></p>
 				</form>
@@ -82,29 +85,6 @@
 		</tr>
 	</tbody>
 </table>
-
-<!-- <h3><u>Queue times</u>&nbsp;<input name="Button_Refresh" type="button" value="Refresh" onclick="GetGraph()" /></h3>
-
-<div id="div_Graph" style="border:1px solid #ccc; padding:5px 10px; width:60%; height:60%;" title="Queue Graph">
-    <canvas id="myChart" style="width:100%; height:100%;"></canvas>
-</div>
-
-<p>&nbsp;</p>
-
-<details open=""><summary><u>Submit a queue length</u></summary>
-
-<form action="http://localhost:3000/Log" method="post">
-<p>Date/time:&nbsp;<input name="Time" type="checkbox" />Use current date/time</p>
-
-<p>Approximate queue duration: 0<input name="ApproxTime" max="15" min="0" step="1" type="range" value="5" />15 minutes</p>
-
-<p>Coffee machine working?:&nbsp;<input name="CoffeeMachine" type="checkbox" /></p>
-
-<p>Card machine working?:&nbsp;<input name="CardMachine" type="checkbox" /></p>
-
-<p><input type="submit" value="Submit entry" /></p>
-</form>
-</details> -->
 
 </body>
 </html>
