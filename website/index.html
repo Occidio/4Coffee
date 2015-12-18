@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<h1 style="text-align: center;">4Coffee queue</h1>
+
+<h3><u>Queue times</u>&nbsp;<input name="Button_Refresh" type="button" value="Refresh" /></h3>
+
+<p>&nbsp;</p>
+
+<div id="div_Graph" style="border:1px solid #ccc;padding:5px 10px;" title="Queue Graph">&nbsp;</div>
+
+<p>&nbsp;</p>
+
+<details open=""><summary><u>Submit a queue length</u></summary>
+
+<form action="http://localhost:3000/Log" method="post">
+<p>Date/time:&nbsp;<input name="Time" type="checkbox" />Use current date/time</p>
+
+<p>Approximate queue duration: 0<input name="ApproxTime" max="15" min="0" step="1" type="range" value="5" />15 minutes</p>
+
+<p>Coffee machine working?:&nbsp;<input name="CoffeeMachine" type="checkbox" /></p>
+
+<p>Card machine working?:&nbsp;<input name="CardMachine" type="checkbox" /></p>
+
+<p><input type="submit" value="Submit entry" /></p>
+</form>
+</details>
+
+<p>&nbsp;</p>
+</body>
+</html>
