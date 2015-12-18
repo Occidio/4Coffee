@@ -77,10 +77,6 @@ method.GetGraphData = function(day, callback)
 {
 	db.serialize(function() 
 	{
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 		var currentAverages = new Array;
 		var todaysData = new Array;
 		db.each("SELECT CurrentAverage FROM Summary WHERE Day = ? ORDER BY Time ASC",day,function(err, row){
@@ -283,6 +279,10 @@ method.InsertSummary = function(actualTime, queueTime)
 	if(mins == 0 && actualTime.getMinutes() > 50)
 	{
 		hour = hour+1;
+		var completeTime = hour+""+mins+"0";
+	}
+	else if(mins == 0)
+	{
 		var completeTime = hour+""+mins+"0";
 	}
 	else{
