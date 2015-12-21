@@ -1,7 +1,8 @@
 <!doctype html>
 <html>
 <head>
-	<title></title>
+	<title>4Coffee</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 	<script type="text/javascript">
 		function init()
@@ -66,35 +67,51 @@
 	</script>
 </head>
 <body onload="init()">
-<h1 style="text-align: center;">4Coffee queue</h1>
+<h1 style="text-align: center;">4Coffee Queue</h1>
 
-<table border="0" cellpadding="0" cellspacing="0" style="border:1px solid #ccc; padding:5px 10px; width:100%; height:80%; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);">
+<div id="about">
+<h3>About</h3>
+<p>4Coffee is a logger for queue times at any cafe or bar. It is used to monitor the time spent in a queue allowing other customers to decide on an optimal time to shop. Over time, the graph will show the average times spent in the queue for a given day.</p>
+<h3>How to use:</h3>
+<p>Using the form below, enter the date and time you joined the queue along with the time spent in the queue.</p>
+</div>
+
+<div>
+<table id="mainTable" border="0" cellpadding="0" cellspacing="0">
 	<tbody>
 		<tr>
 			<td width="60%">
-				<h3><u>Queue times</u></h3>
-				<div><input type="button" value="Monday" onclick="GetGraph(0)"/><input type="button" value="Tuesday" onclick="GetGraph(1)"/><input type="button" value="Wednesday" onclick="GetGraph(2)"/><input type="button" value="Thursday" onclick="GetGraph(3)"/><input type="button" value="Friday" onclick="GetGraph(4)"/></div>
+				<h3>Queue times</h3>
+				<div>
+				<input type="button" class="button" value="Monday" onclick="GetGraph(0)"/>
+				<input type="button" class="button" value="Tuesday" onclick="GetGraph(1)"/>
+				<input type="button" class="button" value="Wednesday" onclick="GetGraph(2)"/>
+				<input type="button" class="button" value="Thursday" onclick="GetGraph(3)"/>
+				<input type="button" class="button" value="Friday" onclick="GetGraph(4)"/>
+				</div>
 				&nbsp;
-			    <canvas id="myChart" style="width:90%; height:60%;"></canvas>
+			    <canvas id="myChart"></canvas>
+		    </td>
 			<td>&nbsp;</td>
 			<td width="40%">
-				<u>Submit a queue length</u>
+				<h3>Submit a queue length</h3>
 				&nbsp;
 				<form action="http://localhost:3000/Log" method="post">
-				<p>Date/time:&nbsp;<input type="datetime-local" id="Time" name="Time" required/><input type="button" value="Now" onclick="UpdateDateTime()"/></p>
+				<p>Date/time:&nbsp;<input type="datetime-local" id="Time" name="Time" required/>&nbsp;<input type="button" class="button" value="Now" onclick="UpdateDateTime()"/></p>
 
 				<p>Approximate queue duration:&nbsp;<input type="range" id="ApproxTime" name="ApproxTime" max="15" min="0" value="5" oninput="UpdateApproxTimeValue()" required/><div id="ApproxTimeValue"></div> minutes</p>
 
-				<p>Coffee machine working?:&nbsp;<input type="checkbox" name="CoffeeMachine" checked required/></p>
+				<!-- <p>Coffee machine working?:&nbsp;<input type="checkbox" name="CoffeeMachine" checked required/></p>
 
-				<p>Card machine working?:&nbsp;<input type="checkbox" name="CardMachine" checked required/></p>
+				<p>Card machine working?:&nbsp;<input type="checkbox" name="CardMachine" checked required/></p> -->
 
-				<p><input type="submit" value="Submit entry" /></p>
+				<p><input type="submit" class="button" value="Submit entry" /></p>
 				</form>
 			</td>
 		</tr>
 	</tbody>
 </table>
+</div>
 
 </body>
 </html>
