@@ -22,6 +22,25 @@ app.get('/GetGraph', function (req, response) {
 	});
 });
 
+app.get('/GetRandom', function (req, response) {
+	response.header("Access-Control-Allow-Origin", "*");
+
+	var DB = new DBInterface();
+	var averages = new Array;
+	var dates = new Array;
+
+	for (var i = 0; i < 33; i++){
+        averages.push(Math.random() * 50);
+        dates.push(Math.random() * 50);		
+	}
+
+	var result = JSON.stringify([averages,dates]);
+
+    response.write(result);
+    response.end();
+	
+});
+
 
 app.post('/Log', function (req, res) {
 	var DB = new DBInterface();
@@ -39,3 +58,7 @@ var server = app.listen(3000, function () {
 	var DB = new DBInterface();
 	DB.CreateSchema();
 });
+
+function addMinutes(date) {
+    return new Date(date.getTime() + 15*60000);
+}
